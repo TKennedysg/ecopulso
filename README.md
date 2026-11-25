@@ -12,7 +12,8 @@ EcoPulso es un observatorio web de consumo para aulas y laboratorios universitar
 
 ## Tablero y backlog
 
-- **Tablero Kanban y backlog editable:** pestaña *Projects* de este repositorio (vistas *Tablero* y *Backlog*).
+- **Tablero Kanban:** https://github.com/users/TKennedysg/projects/1/views/1
+- **Backlog editable (tabla con prioridad e incremento):** https://github.com/users/TKennedysg/projects/1/views/2?visibleFields=%5B%22Title%22%2C%22Status%22%2C%22Labels%22%2C%22Milestone%22%5D
 - **Backlog en CSV:** [`docs/backlog.csv`](docs/backlog.csv) (se abre en Excel o Google Sheets).
 - Cada historia es un *issue*: la etiqueta indica la prioridad MoSCoW y los puntos; el *milestone*, el incremento.
 
