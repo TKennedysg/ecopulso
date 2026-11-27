@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>EcoPulso · Observatorio de consumo</title>
+<style>
+  :root { --verde:#14532D; --verde2:#1F7A4D; --fondo:#F4F7F4; --borde:#CFD8D2; --ambar:#B45309; --rojo:#B42318; }
+  * { box-sizing: border-box; }
+  body { margin:0; font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif; background:var(--fondo); color:#13231B; }
+  header { background:var(--verde); color:#fff; padding:18px 24px; }
+  header h1 { margin:0; font-size:22px; } header p { margin:4px 0 0; opacity:.85; font-size:14px; }
+  main { max-width:1000px; margin:0 auto; padding:20px; display:grid; gap:16px; }
+  section { background:#fff; border:1px solid var(--borde); border-radius:10px; padding:16px; }
+  h2 { margin:0 0 10px; font-size:17px; color:var(--verde); }
+  textarea { width:100%; min-height:160px; font-family: ui-monospace, Consolas, monospace; font-size:13px; border:1px solid var(--borde); border-radius:6px; padding:8px; }
+  button { background:var(--verde2); color:#fff; border:0; border-radius:6px; padding:9px 16px; font-size:14px; cursor:pointer; margin-right:8px; }
+  button.sec { background:#fff; color:var(--verde); border:1px solid var(--verde2); }
+  table { width:100%; border-collapse:collapse; font-size:14px; }
+  th, td { text-align:left; padding:7px 8px; border-bottom:1px solid var(--borde); }
+  th { background:#EEF5F0; }
+  .ok { color:var(--verde2); font-weight:600; } .err { color:var(--rojo); font-weight:600; }
+  .alerta { background:#FFF4E5; border-left:4px solid var(--ambar); padding:8px 10px; border-radius:4px; margin-top:4px; }
+  .badge { display:inline-block; padding:2px 8px; border-radius:10px; font-size:12px; background:#E2F1E7; color:var(--verde); }
+  footer { text-align:center; font-size:12px; color:#4B5B52; padding:16px; }
+</style>
+</head>
+<body>
+<header>
+  <h1>EcoPulso · Observatorio de consumo</h1>
+  <p>Datos simulados · importa lecturas, compara con la línea base y recibe alertas explicadas</p>
+</header>
+<main>
+  <section>
+    <h2>1. Importar lecturas (CSV)</h2>
+    <p style="margin-top:0;font-size:14px">Columnas: <code>espacio,fecha,tipo,valor,unidad</code> · fecha en formato AAAA-MM-DD · unidades: Wh, kWh, L, m3.</p>
+    <textarea id="csv" aria-label="Contenido CSV"></textarea>
+    <p>
+      <button id="importar">Importar</button>
+      <button class="sec" id="ejemplo">Cargar ejemplo válido</button>
+      <button class="sec" id="errores">Cargar ejemplo con errores</button>
+    </p>
+    <div id="resumen" role="status"></div>
+  </section>
+  <section>
+    <h2>2. Panel semanal y alertas</h2>
+    <div id="panel"><p style="font-size:14px">Importa lecturas para ver el panel.</p></div>
+  </section>
+</main>
+<footer>EcoPulso <span id="version">v{{VERSION}}</span> · commit <span id="commit">{{COMMIT}}</span> · construido {{FECHA}} · Proyecto 5 · Modelado Ágil IS-505 · ULEAM</footer>
+<script type="module">
+  import { importarCSV, compararSemana, espacios } from './core.js';
+  const $ = (id) => document.getElementById(id);
+  const esc = (s) => String(s).replace(/[&<>]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' }[c]));
+
+  $('ejemplo').onclick = async () => { $('csv').value = await (await fetch('lecturas_ejemplo.csv')).text(); };
+  $('errores').onclick = () => {
+    $('csv').value = 'espacio,fecha,tipo,valor,unidad\nLab-1,2026-11-02,energia,-5,kWh\nLab-1,2026-11-03,energia,abc,kWh\nLab-1,2026-11-04,energia,10,kw\nLab-1,2026-11-05,energia,12,kWh\nLab-1,2026-11-05,energia,12,kWh';
+  };
+  $('importar').onclick = () => {
+    try {
+      const { aceptadas, rechazadas } = importarCSV($('csv').value);
+      let html = `<p><span class="ok">${aceptadas.length} lecturas aceptadas</span> · <span class="${rechazadas.length ? 'err' : 'ok'}">${rechazadas.length} rechazadas</span></p>`;
+      if (rechazadas.length) {
+        html += '<table><tr><th>Fila</th><th>Motivo del rechazo</th></tr>' + rechazadas.map((r) => `<tr><td>${r.fila}</td><td class="err">${esc(r.motivo)}</td></tr>`).join('') + '</table>';
+      }
+      $('resumen').innerHTML = html;
+      const filas = espacios(aceptadas).map((e) => compararSemana(aceptadas, e));
+      $('panel').innerHTML = '<table><tr><th>Espacio</th><th>Semana</th><th>Consumo</th><th>Línea base (4 sem.)</th><th>Variación</th><th>Estado</th></tr>' +
+        filas.map((f) => `<tr><td>${esc(f.espacio)}</td><td>${f.semana ?? '—'}</td><td>${f.actual ?? '—'} ${f.unidad ?? ''}</td><td>${f.lineaBase ?? '—'}</td><td>${f.variacion !== undefined ? f.variacion + ' %' : '—'}</td><td><span class="badge">${esc(f.estado)}</span>${f.alerta ? `<div class="alerta">⚠ ${esc(f.alerta)}</div>` : ''}</td></tr>`).join('') + '</table>';
+    } catch (e) {
+      $('resumen').innerHTML = `<p class="err">Archivo rechazado: ${esc(e.message)}</p>`;
+      $('panel').innerHTML = '';
+    }
+  };
+</script>
+</body>
+</html>
