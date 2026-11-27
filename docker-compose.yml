@@ -1,0 +1,9 @@
+services:
+  ecopulso:
+    build: .
+    image: ecopulso:local
+    ports:
+      - "8080:8080"
+    env_file:
+      - .env          # copiar .env.example como .env y poner un token propio; .env no se sube al repositorio
+    restart: unless-stopped
