@@ -44,13 +44,22 @@
   </section>
   <section>
     <h2>2. Panel semanal y alertas</h2>
+    <p style="font-size:14px;margin-top:0">
+      <label>Espacio <select id="uEspacio"></select></label>
+      <label>Umbral (%) <input id="uValor" type="number" value="15" style="width:70px"></label>
+      <label>Autor <input id="uAutor" type="text" placeholder="Nombre" style="width:150px"></label>
+      <button class="sec" id="uGuardar">Guardar umbral</button>
+      <span id="uMsg" role="status"></span>
+    </p>
+    <ul id="uRegistro" style="font-size:13px"></ul>
     <div id="panel"><p style="font-size:14px">Importa lecturas para ver el panel.</p></div>
   </section>
 </main>
 <footer>EcoPulso <span id="version">v{{VERSION}}</span> · commit <span id="commit">{{COMMIT}}</span> · construido {{FECHA}} · Proyecto 5 · Modelado Ágil IS-505 · ULEAM</footer>
 <script type="module">
-  import { importarCSV, compararSemana, espacios } from './core.js';
+  import { importarCSV, compararSemana, espacios, configurarUmbral, UMBRAL_POR_DEFECTO } from './core.js';
   const $ = (id) => document.getElementById(id);
+  const umbrales = {}; const registro = []; let aceptadasActuales = [];
   const esc = (s) => String(s).replace(/[&<>]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' }[c]));
 
   $('ejemplo').onclick = async () => { $('csv').value = await (await fetch('lecturas_ejemplo.csv')).text(); };
@@ -65,12 +74,28 @@
         html += '<table><tr><th>Fila</th><th>Motivo del rechazo</th></tr>' + rechazadas.map((r) => `<tr><td>${r.fila}</td><td class="err">${esc(r.motivo)}</td></tr>`).join('') + '</table>';
       }
       $('resumen').innerHTML = html;
-      const filas = espacios(aceptadas).map((e) => compararSemana(aceptadas, e));
-      $('panel').innerHTML = '<table><tr><th>Espacio</th><th>Semana</th><th>Consumo</th><th>Línea base (4 sem.)</th><th>Variación</th><th>Estado</th></tr>' +
-        filas.map((f) => `<tr><td>${esc(f.espacio)}</td><td>${f.semana ?? '—'}</td><td>${f.actual ?? '—'} ${f.unidad ?? ''}</td><td>${f.lineaBase ?? '—'}</td><td>${f.variacion !== undefined ? f.variacion + ' %' : '—'}</td><td><span class="badge">${esc(f.estado)}</span>${f.alerta ? `<div class="alerta">⚠ ${esc(f.alerta)}</div>` : ''}</td></tr>`).join('') + '</table>';
+      aceptadasActuales = aceptadas;
+      $('uEspacio').innerHTML = espacios(aceptadas).map((e) => `<option>${esc(e)}</option>`).join('');
+      pintarPanel();
     } catch (e) {
       $('resumen').innerHTML = `<p class="err">Archivo rechazado: ${esc(e.message)}</p>`;
       $('panel').innerHTML = '';
+    }
+  };
+  function pintarPanel() {
+      const filas = espacios(aceptadasActuales).map((e) => compararSemana(aceptadasActuales, e, 'energia', umbrales[e] ?? UMBRAL_POR_DEFECTO));
+      $('panel').innerHTML = '<table><tr><th>Espacio</th><th>Semana</th><th>Consumo</th><th>Línea base (4 sem.)</th><th>Variación</th><th>Estado</th></tr>' +
+        filas.map((f) => `<tr><td>${esc(f.espacio)}</td><td>${f.semana ?? '—'}</td><td>${f.actual ?? '—'} ${f.unidad ?? ''}</td><td>${f.lineaBase ?? '—'}</td><td>${f.variacion !== undefined ? f.variacion + ' %' : '—'}</td><td><span class="badge">${esc(f.estado)}</span>${f.alerta ? `<div class="alerta">⚠ ${esc(f.alerta)}</div>` : ''}</td></tr>`).join('') + '</table>';
+  }
+  $('uGuardar').onclick = () => {
+    try {
+      const r = configurarUmbral($('uEspacio').value, $('uValor').value, $('uAutor').value);
+      umbrales[r.espacio] = r.umbral; registro.unshift(r);
+      $('uMsg').innerHTML = `<span class="ok">Umbral de ${esc(r.espacio)}: ${r.umbral} %</span>`;
+      $('uRegistro').innerHTML = registro.map((x) => `<li>${esc(x.fecha.slice(0, 16).replace('T', ' '))} UTC · ${esc(x.autor)} · ${esc(x.espacio)} → ${x.umbral} %</li>`).join('');
+      pintarPanel();
+    } catch (e) {
+      $('uMsg').innerHTML = `<span class="err">${esc(e.message)}</span>`;
     }
   };
 </script>
