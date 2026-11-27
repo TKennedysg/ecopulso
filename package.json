@@ -1,0 +1,14 @@
+{
+  "name": "ecopulso",
+  "version": "1.0.0",
+  "description": "EcoPulso: observatorio de consumo y retos sostenibles (Proyecto 5, Kanban-XP, Modelado Ágil IS-505, ULEAM)",
+  "type": "module",
+  "private": true,
+  "engines": { "node": ">=20" },
+  "scripts": {
+    "test": "node --test tests/*.test.js",
+    "build": "node scripts/build.mjs",
+    "start": "node server.mjs"
+  },
+  "license": "MIT"
+}
