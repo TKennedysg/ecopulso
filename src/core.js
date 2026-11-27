@@ -12,6 +12,18 @@ const UNIDADES = {
 };
 
 export const UMBRAL_POR_DEFECTO = 15; // % sobre la línea base
+export const UMBRAL_MIN = 5;
+export const UMBRAL_MAX = 50;
+
+/**
+ * HU-08: configura el umbral de alerta de un espacio.
+ * Devuelve el registro { espacio, umbral, autor, fecha } que se aplica desde el siguiente cálculo.
+ */
+export function configurarUmbral(espacio, valor, autor, fecha = new Date()) {
+  const umbral = Number(valor);
+  if (!Number.isFinite(umbral)) throw new Error('El umbral debe ser un número.');
+  return { espacio, umbral, autor, fecha: fecha.toISOString() };
+}
 
 /**
  * HU-01 a HU-04: importa un CSV de lecturas.
