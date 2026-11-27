@@ -18,11 +18,16 @@ export const UMBRAL_MAX = 50;
 /**
  * HU-08: configura el umbral de alerta de un espacio.
  * Devuelve el registro { espacio, umbral, autor, fecha } que se aplica desde el siguiente cálculo.
+ * Rechaza valores fuera del rango permitido (5 % a 50 %) con un mensaje que lo indica.
  */
 export function configurarUmbral(espacio, valor, autor, fecha = new Date()) {
   const umbral = Number(valor);
   if (!Number.isFinite(umbral)) throw new Error('El umbral debe ser un número.');
-  return { espacio, umbral, autor, fecha: fecha.toISOString() };
+  if (umbral < UMBRAL_MIN || umbral > UMBRAL_MAX) {
+    throw new Error(`El umbral debe estar entre ${UMBRAL_MIN} % y ${UMBRAL_MAX} %.`);
+  }
+  if (!autor || !String(autor).trim()) throw new Error('Indique quién registra el cambio.');
+  return { espacio, umbral, autor: String(autor).trim(), fecha: fecha.toISOString() };
 }
 
 /**
