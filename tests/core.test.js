@@ -48,12 +48,16 @@ test('HU-04 · una unidad desconocida («kw») se rechaza', () => {
   assert.equal(r.rechazadas[0].motivo, 'unidad no válida');
 });
 
-function semanas(valores) {
-  // Una lectura por semana (lunes), empezando el 2026-10-05.
-  return valores.map((v, i) => {
-    const d = new Date(Date.UTC(2026, 9, 5 + 7 * i)).toISOString().slice(0, 10);
-    return { espacio: 'Lab-1', fecha: d, tipo: 'energia', valor: v, unidad: 'kWh' };
-  });
+function semanas(valores, dias = 5) {
+  // Cada semana reparte su total en lecturas diarias de lunes a viernes (2 días sin dato: fin de semana),
+  // empezando el lunes 2026-10-05.
+  return valores.flatMap((v, i) => Array.from({ length: dias }, (_, j) => ({
+    espacio: 'Lab-1',
+    fecha: new Date(Date.UTC(2026, 9, 5 + 7 * i + j)).toISOString().slice(0, 10),
+    tipo: 'energia',
+    valor: v / dias,
+    unidad: 'kWh',
+  })));
 }
 
 test('HU-05 · base de 100 kWh y semana de 120 kWh da +20 %', () => {

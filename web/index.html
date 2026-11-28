@@ -22,6 +22,7 @@
   .ok { color:var(--verde2); font-weight:600; } .err { color:var(--rojo); font-weight:600; }
   .alerta { background:#FFF4E5; border-left:4px solid var(--ambar); padding:8px 10px; border-radius:4px; margin-top:4px; }
   .badge { display:inline-block; padding:2px 8px; border-radius:10px; font-size:12px; background:#E2F1E7; color:var(--verde); }
+  details { margin-top:8px; font-size:13px; } summary { cursor:pointer; color:var(--verde); font-weight:600; }
   footer { text-align:center; font-size:12px; color:#4B5B52; padding:16px; }
 </style>
 </head>
@@ -85,7 +86,7 @@
   function pintarPanel() {
       const filas = espacios(aceptadasActuales).map((e) => compararSemana(aceptadasActuales, e, 'energia', umbrales[e] ?? UMBRAL_POR_DEFECTO));
       $('panel').innerHTML = '<table><tr><th>Espacio</th><th>Semana</th><th>Consumo</th><th>Línea base (4 sem.)</th><th>Variación</th><th>Estado</th></tr>' +
-        filas.map((f) => `<tr><td>${esc(f.espacio)}</td><td>${f.semana ?? '—'}</td><td>${f.actual ?? '—'} ${f.unidad ?? ''}</td><td>${f.lineaBase ?? '—'}</td><td>${f.variacion !== undefined ? f.variacion + ' %' : '—'}</td><td><span class="badge">${esc(f.estado)}</span>${f.alerta ? `<div class="alerta">⚠ ${esc(f.alerta)}</div>` : ''}</td></tr>`).join('') + '</table>';
+        filas.map((f) => `<tr><td>${esc(f.espacio)}</td><td>${f.semana ?? '—'}</td><td>${f.actual ?? '—'} ${f.unidad ?? ''}</td><td>${f.lineaBase ?? '—'}</td><td>${f.variacion !== undefined ? f.variacion + ' %' : '—'}</td><td><span class="badge">${esc(f.estado)}</span>${f.alerta ? `<div class="alerta">⚠ ${esc(f.alerta)}</div>` : ''}</td></tr>`).join('') + '</table>' + filas.map((f) => `<details><summary>${esc(f.espacio)} · detalle diario de la semana ${esc(f.semana ?? '')}</summary><table><tr><th>Fecha</th><th>Consumo</th><th>Estado</th></tr>${(f.detalleDiario ?? []).map((d) => `<tr><td>${esc(d.fecha)}</td><td>${d.valor === null ? '—' : `${d.valor} ${esc(d.unidad)}`}</td><td>${esc(d.estado)}</td></tr>`).join('')}</table></details>`).join('');
   }
   $('uGuardar').onclick = () => {
     try {
