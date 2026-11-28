@@ -24,7 +24,12 @@ Importación de lecturas por CSV con validación y alerta explicada:
 | HU-05 | Compara la última semana con la línea base (promedio de 4 semanas); base 0 sin error | `tests/core.test.js` |
 | HU-07 | Emite una alerta con la regla aplicada si la variación supera el umbral (15 %); con más de 2 días sin dato en la semana no alerta e indica «datos insuficientes» | `tests/core.test.js`, `tests/validaciones.test.js` |
 | HU-08 | Umbral configurable por espacio entre 5 % y 50 %, registrado con fecha y autor | `tests/umbral.test.js` |
+| HU-13 | Importa lecturas incompletas de un laboratorio nuevo: acepta las filas válidas, rechaza las que no tienen unidad, informa los días sin dato y muestra «línea base en construcción (n/4 semanas)» sin alertas | `tests/cambio_hu13.test.js` |
 | HU-06 | Muestra cada día de la última semana como consumo registrado, incluyendo `0`, o «sin dato» cuando no existe lectura | `tests/validaciones.test.js` |
+
+## Modelos
+
+Los diagramas UML, BPMN y C4 están en [`docs/modelos/`](docs/modelos/) como archivos Mermaid editables, con la versión anterior al cambio HU-13 (`v1/`) y la actual (`v2/`). Se abren en GitHub, en https://mermaid.live o en VS Code.
 
 ## Requisitos de ejecución
 
