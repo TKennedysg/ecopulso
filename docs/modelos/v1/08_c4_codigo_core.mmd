@@ -1,0 +1,30 @@
+classDiagram
+  direction TB
+  class core_js {
+    <<módulo ES · src/core.js>>
+    +UMBRAL_POR_DEFECTO = 15
+    +UMBRAL_MIN = 5
+    +UMBRAL_MAX = 50
+    +MAX_DIAS_SIN_DATO = 2
+    +importarCSV(texto) ResultadoImportacion
+    +fechaValida(fecha) booleano
+    +inicioSemana(fecha) lunes ISO
+    +compararSemana(lecturas, espacio, tipo, umbral) ComparacionSemanal
+    +configurarUmbral(espacio, valor, autor, fecha) ConfiguracionUmbral
+    +espacios(lecturas) texto[]
+    -parseCSV(texto) celdas[][]
+    -redondear(n, d) número
+  }
+  class index_html {
+    <<interfaz>>
+    -pintarPanel()
+  }
+  class pruebas {
+    <<node:test · tests/>>
+    core.test.js
+    validaciones.test.js
+    umbral.test.js
+  }
+  index_html ..> core_js : importa
+  pruebas ..> core_js : verifica criterios
+  note for core_js "compararSemana evalúa en orden:<br>1. sin semanas → sin datos<br>2. sin semanas previas → línea base en construcción (0/4)<br>3. línea base = 0 → sin línea base comparable<br>4. más de 2 días sin dato → datos insuficientes<br>5. variación > umbral → alerta con la regla<br>6. si no → normal"

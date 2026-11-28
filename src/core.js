@@ -66,6 +66,7 @@ export function importarCSV(texto) {
     }
     const valor = Number(valorTxt);
     if (valor < 0) return rechazadas.push({ fila, motivo: 'consumo negativo' });
+    if (!unidadTxt) return rechazadas.push({ fila, motivo: 'sin unidad' });
     if (!UNIDADES[unidadTxt]) return rechazadas.push({ fila, motivo: 'unidad no válida' });
 
     const clave = `${espacio}|${fecha}|${tipo}`;
@@ -123,6 +124,31 @@ export function fechaValida(fecha) {
   return !Number.isNaN(d.getTime()) && d.toISOString().slice(0, 10) === fecha;
 }
 
+/**
+ * HU-13: días sin lectura de cada espacio dentro del periodo importado
+ * (entre su primera y su última fecha). Sirve para avisar de cargas incompletas.
+ */
+export function diasSinDato(lecturas) {
+  const porEspacio = new Map();
+  for (const l of lecturas) {
+    if (!porEspacio.has(l.espacio)) porEspacio.set(l.espacio, new Set());
+    porEspacio.get(l.espacio).add(l.fecha);
+  }
+  return [...porEspacio.keys()].sort().map((espacio) => {
+    const fechas = [...porEspacio.get(espacio)].sort();
+    const faltantes = [];
+    const d = new Date(`${fechas[0]}T00:00:00Z`);
+    const fin = fechas[fechas.length - 1];
+    while (d.toISOString().slice(0, 10) < fin) {
+      d.setUTCDate(d.getUTCDate() + 1);
+      const f = d.toISOString().slice(0, 10);
+      if (!porEspacio.get(espacio).has(f) && f < fin) faltantes.push(f);
+    }
+    return { espacio, desde: fechas[0], hasta: fin, faltantes };
+  });
+}
+
+export const SEMANAS_LINEA_BASE = 4; // HU-05/HU-13: la línea base necesita 4 semanas previas completas
 export const MAX_DIAS_SIN_DATO = 2; // HU-07: con más días sin lectura en la semana no se emite alerta
 
 /** Lunes (AAAA-MM-DD) de la semana ISO de una fecha. */
@@ -175,8 +201,8 @@ export function compararSemana(lecturas, espacio, tipo = 'energia', umbral = UMB
   });
   const base = { espacio, tipo, unidad, semana: actualSemana, actual, semanasBase: previas.length, diasSinDato, detalleDiario };
 
-  if (previas.length === 0) {
-    return { ...base, estado: 'línea base en construcción (0/4 semanas)', alerta: null };
+  if (previas.length < SEMANAS_LINEA_BASE) {
+    return { ...base, estado: `línea base en construcción (${previas.length}/${SEMANAS_LINEA_BASE} semanas)`, alerta: null };
   }
   const lineaBase = redondear(previas.reduce((a, s) => a + porSemana.get(s), 0) / previas.length, 3);
   if (lineaBase === 0) {
@@ -186,10 +212,12 @@ export function compararSemana(lecturas, espacio, tipo = 'energia', umbral = UMB
   if (diasSinDato > MAX_DIAS_SIN_DATO) {
     return { ...base, lineaBase, variacion, estado: `datos insuficientes (${diasSinDato} días sin dato)`, alerta: null };
   }
+  // Mejora tras la validación: la alerta dice cuánto bajar para volver a la normalidad.
+  const meta = redondear(lineaBase * (1 + umbral / 100), 1);
   const alerta = variacion > umbral
-    ? `Consumo ${variacion} % sobre la línea base (regla: más de ${umbral} %)`
+    ? `Consumo ${variacion} % sobre la línea base (regla: más de ${umbral} %). Meta: ${meta} ${unidad} o menos por semana (bajar ${redondear(actual - meta, 1)} ${unidad}).`
     : null;
-  return { ...base, lineaBase, variacion, estado: alerta ? 'alerta' : 'normal', alerta };
+  return { ...base, lineaBase, variacion, meta, estado: alerta ? 'alerta' : 'normal', alerta };
 }
 
 export function espacios(lecturas) {

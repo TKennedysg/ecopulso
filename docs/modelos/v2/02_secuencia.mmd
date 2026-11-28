@@ -1,0 +1,31 @@
+sequenceDiagram
+  autonumber
+  actor R as Responsable de espacio
+  participant UI as Interfaz (index.html)
+  participant I as Importador (importarCSV)
+  participant F as Detector de faltantes (diasSinDato)
+  participant C as Calculadora (compararSemana)
+  R->>UI: pega o carga el CSV y pulsa «Importar»
+  UI->>I: importarCSV(texto)
+  alt falta una columna o el archivo está vacío (excepción)
+    I-->>UI: Error «Falta la columna …» / «El archivo está vacío»
+    UI-->>R: «Archivo rechazado: …» (no se calcula nada)
+  else archivo con encabezado válido
+    I-->>UI: aceptadas + rechazadas (fila y motivo)
+    UI->>F: diasSinDato(aceptadas)
+    F-->>UI: días sin dato por espacio
+    UI-->>R: resumen de la carga y avisos de faltantes
+    loop por cada espacio
+      UI->>C: compararSemana(lecturas, espacio, umbral)
+      alt menos de 4 semanas previas
+        C-->>UI: «línea base en construcción (n/4)», sin alerta
+      else más de 2 días sin dato en la semana
+        C-->>UI: «datos insuficientes», sin alerta
+      else variación mayor que el umbral
+        C-->>UI: estado «alerta» + texto con la regla
+      else
+        C-->>UI: estado «normal»
+      end
+    end
+    UI-->>R: panel semanal con línea base y alertas
+  end

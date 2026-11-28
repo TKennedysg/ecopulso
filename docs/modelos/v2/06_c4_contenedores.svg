@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1240" height="640" viewBox="0 0 1240 640" font-family="Arial, Helvetica, sans-serif">
+<defs><marker id="a" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto"><path d="M0,0 L10,4 L0,8 z" fill="#444"/></marker></defs>
+<rect width="100%" height="100%" fill="#fff"/>
+<text x="20" y="32" font-size="20" font-weight="bold" fill="#14532D">C4 · Nivel 2 · Contenedores de EcoPulso</text>
+<rect x="60" y="70" width="260" height="110" rx="26" fill="#08427B" stroke="#2d2d2d" stroke-width="0.8"/>
+<text x="190.0" y="96" text-anchor="middle" font-size="16" font-weight="bold" fill="#fff">Responsable de espacio</text>
+<text x="190.0" y="115" text-anchor="middle" font-size="12" fill="#fff">[Persona]</text>
+<text x="190.0" y="138" text-anchor="middle" font-size="13" fill="#fff">Usa EcoPulso desde el navegador</text>
+<rect x="30" y="220" width="860" height="400" fill="none" stroke="#666" stroke-dasharray="8,5" stroke-width="1.4" rx="6"/>
+<text x="42" y="608" font-size="14" font-weight="bold" fill="#444">EcoPulso [sistema]</text>
+<rect x="60" y="250" width="330" height="150" rx="8" fill="#438DD5" stroke="#2d2d2d" stroke-width="0.8"/>
+<text x="225.0" y="276" text-anchor="middle" font-size="16" font-weight="bold" fill="#fff">Aplicación web</text>
+<text x="225.0" y="295" text-anchor="middle" font-size="12" fill="#fff">[Contenedor: HTML + JavaScript (módulo ES)]</text>
+<text x="225.0" y="318" text-anchor="middle" font-size="13" fill="#fff">Se ejecuta en el navegador: importa y valida</text>
+<text x="225.0" y="334" text-anchor="middle" font-size="13" fill="#fff">el CSV, calcula la línea base, muestra panel</text>
+<text x="225.0" y="350" text-anchor="middle" font-size="13" fill="#fff">y alertas</text>
+<rect x="500" y="250" width="360" height="150" rx="8" fill="#438DD5" stroke="#2d2d2d" stroke-width="0.8"/>
+<text x="680.0" y="276" text-anchor="middle" font-size="16" font-weight="bold" fill="#fff">Sitio estático</text>
+<text x="680.0" y="295" text-anchor="middle" font-size="12" fill="#fff">[Contenedor: GitHub Pages]</text>
+<text x="680.0" y="318" text-anchor="middle" font-size="13" fill="#fff">Sirve dist/: index.html, core.js, CSV de ejemplo y</text>
+<text x="680.0" y="334" text-anchor="middle" font-size="13" fill="#fff">version.json</text>
+<rect x="500" y="440" width="360" height="150" rx="8" fill="#438DD5" stroke="#2d2d2d" stroke-width="0.8"/>
+<text x="680.0" y="466" text-anchor="middle" font-size="16" font-weight="bold" fill="#fff">Servidor local</text>
+<text x="680.0" y="485" text-anchor="middle" font-size="12" fill="#fff">[Contenedor: Node 22 · server.mjs]</text>
+<text x="680.0" y="508" text-anchor="middle" font-size="13" fill="#fff">Entorno reproducible (npm start o Docker): sirve</text>
+<text x="680.0" y="524" text-anchor="middle" font-size="13" fill="#fff">dist/, /api/health y /api/admin/info con token</text>
+<rect x="940" y="250" width="270" height="150" rx="8" fill="#999999" stroke="#2d2d2d" stroke-width="0.8"/>
+<text x="1075.0" y="276" text-anchor="middle" font-size="16" font-weight="bold" fill="#fff">GitHub Actions</text>
+<text x="1075.0" y="295" text-anchor="middle" font-size="12" fill="#fff">[Sistema externo]</text>
+<text x="1075.0" y="318" text-anchor="middle" font-size="13" fill="#fff">npm ci, pruebas, build, despliegue y</text>
+<text x="1075.0" y="334" text-anchor="middle" font-size="13" fill="#fff">prueba de humo</text>
+<polyline points="190,180 190,250" fill="none" stroke="#444" stroke-width="1.5" stroke-dasharray="6,4" marker-end="url(#a)"/>
+<text x="240" y="220" font-size="13" fill="#222" text-anchor="middle">Usa</text>
+<text x="240" y="236" font-size="12" fill="#555" text-anchor="middle" font-style="italic">[navegador]</text>
+<polyline points="500,330 390,330" fill="none" stroke="#444" stroke-width="1.5" stroke-dasharray="6,4" marker-end="url(#a)"/>
+<text x="445" y="318" font-size="13" fill="#222" text-anchor="middle">Entrega</text>
+<text x="445" y="334" font-size="12" fill="#555" text-anchor="middle" font-style="italic">[HTTPS]</text>
+<polyline points="500,515 225,515 225,400" fill="none" stroke="#444" stroke-width="1.5" stroke-dasharray="6,4" marker-end="url(#a)"/>
+<text x="370" y="540" font-size="13" fill="#222" text-anchor="middle">Entrega los archivos en local</text>
+<text x="370" y="556" font-size="12" fill="#555" text-anchor="middle" font-style="italic">[HTTP :8080]</text>
+<polyline points="940,325 860,325" fill="none" stroke="#444" stroke-width="1.5" stroke-dasharray="6,4" marker-end="url(#a)"/>
+<text x="900" y="316" font-size="13" fill="#222" text-anchor="middle">Publica dist/</text>
+</svg>

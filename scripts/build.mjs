@@ -12,5 +12,6 @@ const html = (await readFile('web/index.html', 'utf8'))
 await writeFile('dist/index.html', html);
 await copyFile('src/core.js', 'dist/core.js');
 await copyFile('data/lecturas_ejemplo.csv', 'dist/lecturas_ejemplo.csv');
+await copyFile('data/lecturas_lab_nuevo.csv', 'dist/lecturas_lab_nuevo.csv');
 await writeFile('dist/version.json', JSON.stringify({ version: pkg.version, commit, construido: fecha }, null, 2));
 console.log(`dist/ construido · v${pkg.version} · ${commit}`);

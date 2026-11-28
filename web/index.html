@@ -16,6 +16,9 @@
   textarea { width:100%; min-height:160px; font-family: ui-monospace, Consolas, monospace; font-size:13px; border:1px solid var(--borde); border-radius:6px; padding:8px; }
   button { background:var(--verde2); color:#fff; border:0; border-radius:6px; padding:9px 16px; font-size:14px; cursor:pointer; margin-right:8px; }
   button.sec { background:#fff; color:var(--verde); border:1px solid var(--verde2); }
+  button:disabled { opacity:.55; cursor:wait; }
+  button:focus-visible, textarea:focus-visible, input:focus-visible, select:focus-visible { outline:3px solid #B45309; outline-offset:2px; }
+  .aviso { background:#EEF5F0; border-left:4px solid var(--verde2); padding:6px 10px; border-radius:4px; margin:4px 0; font-size:14px; }
   table { width:100%; border-collapse:collapse; font-size:14px; }
   th, td { text-align:left; padding:7px 8px; border-bottom:1px solid var(--borde); }
   th { background:#EEF5F0; }
@@ -40,6 +43,7 @@
       <button id="importar">Importar</button>
       <button class="sec" id="ejemplo">Cargar ejemplo válido</button>
       <button class="sec" id="errores">Cargar ejemplo con errores</button>
+      <button class="sec" id="nuevo">Cargar laboratorio nuevo (incompleto)</button>
     </p>
     <div id="resumen" role="status"></div>
   </section>
@@ -58,12 +62,28 @@
 </main>
 <footer>EcoPulso <span id="version">v{{VERSION}}</span> · commit <span id="commit">{{COMMIT}}</span> · construido {{FECHA}} · Proyecto 5 · Modelado Ágil IS-505 · ULEAM</footer>
 <script type="module">
-  import { importarCSV, compararSemana, espacios, configurarUmbral, UMBRAL_POR_DEFECTO } from './core.js';
+  import { importarCSV, compararSemana, espacios, configurarUmbral, diasSinDato, UMBRAL_POR_DEFECTO } from './core.js';
   const $ = (id) => document.getElementById(id);
   const umbrales = {}; const registro = []; let aceptadasActuales = [];
   const esc = (s) => String(s).replace(/[&<>]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' }[c]));
 
-  $('ejemplo').onclick = async () => { $('csv').value = await (await fetch('lecturas_ejemplo.csv')).text(); };
+  const botones = ['importar', 'ejemplo', 'errores', 'nuevo'];
+  async function cargarArchivo(nombre) {
+    botones.forEach((b) => { $(b).disabled = true; });
+    $('resumen').innerHTML = '<p class="aviso" aria-busy="true">Cargando lecturas de ejemplo…</p>';
+    try {
+      const r = await fetch(nombre);
+      if (!r.ok) throw new Error(`respuesta ${r.status}`);
+      $('csv').value = await r.text();
+      $('resumen').innerHTML = '<p class="aviso">Ejemplo cargado. Pulsa «Importar» para validarlo.</p>';
+    } catch (e) {
+      $('resumen').innerHTML = `<p class="err">No se pudo cargar el ejemplo (${esc(e.message)}). Revisa tu conexión e inténtalo de nuevo.</p>`;
+    } finally {
+      botones.forEach((b) => { $(b).disabled = false; });
+    }
+  }
+  $('ejemplo').onclick = () => cargarArchivo('lecturas_ejemplo.csv');
+  $('nuevo').onclick = () => cargarArchivo('lecturas_lab_nuevo.csv');
   $('errores').onclick = () => {
     $('csv').value = 'espacio,fecha,tipo,valor,unidad\nLab-1,2026-11-02,energia,-5,kWh\nLab-1,2026-11-03,energia,abc,kWh\nLab-1,2026-11-04,energia,10,kw\nLab-1,2026-11-05,energia,12,kWh\nLab-1,2026-11-05,energia,12,kWh';
   };
@@ -73,6 +93,9 @@
       let html = `<p><span class="ok">${aceptadas.length} lecturas aceptadas</span> · <span class="${rechazadas.length ? 'err' : 'ok'}">${rechazadas.length} rechazadas</span></p>`;
       if (rechazadas.length) {
         html += '<table><tr><th>Fila</th><th>Motivo del rechazo</th></tr>' + rechazadas.map((r) => `<tr><td>${r.fila}</td><td class="err">${esc(r.motivo)}</td></tr>`).join('') + '</table>';
+      }
+      for (const d of diasSinDato(aceptadas).filter((x) => x.faltantes.length)) {
+        html += `<p class="aviso">${esc(d.espacio)}: ${d.faltantes.length} día(s) sin dato entre ${d.desde} y ${d.hasta} (${d.faltantes.join(', ')}). Se muestran como «sin dato», no como consumo cero.</p>`;
       }
       $('resumen').innerHTML = html;
       aceptadasActuales = aceptadas;
