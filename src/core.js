@@ -56,10 +56,10 @@ export function importarCSV(texto) {
     const valorTxt = celdas[idx.valor];
     const unidadTxt = (celdas[idx.unidad] || '').toLowerCase();
 
-    if (!espacio || !/^\d{4}-\d{2}-\d{2}$/.test(fecha || '')) {
+    if (!espacio || !fechaValida(fecha)) {
       return rechazadas.push({ fila, motivo: 'espacio o fecha no válidos (use AAAA-MM-DD)' });
     }
-    if (valorTxt === undefined || valorTxt === '' || Number.isNaN(Number(valorTxt))) {
+    if (valorTxt === undefined || valorTxt === '' || !Number.isFinite(Number(valorTxt))) {
       return rechazadas.push({ fila, motivo: 'valor no numérico' });
     }
     const valor = Number(valorTxt);
@@ -77,6 +77,15 @@ export function importarCSV(texto) {
   return { aceptadas, rechazadas };
 }
 
+/** true si el texto es una fecha real en formato AAAA-MM-DD (rechaza 2026-02-30 o 2026-99-99). */
+export function fechaValida(fecha) {
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(fecha || '')) return false;
+  const d = new Date(`${fecha}T00:00:00Z`);
+  return !Number.isNaN(d.getTime()) && d.toISOString().slice(0, 10) === fecha;
+}
+
+export const MAX_DIAS_SIN_DATO = 2; // HU-07: con más días sin lectura en la semana no se emite alerta
+
 /** Lunes (AAAA-MM-DD) de la semana ISO de una fecha. */
 export function inicioSemana(fecha) {
   const d = new Date(`${fecha}T00:00:00Z`);
@@ -88,14 +97,18 @@ export function inicioSemana(fecha) {
 /**
  * HU-05 y HU-07: compara la última semana de un espacio con su línea base
  * (promedio de las 4 semanas anteriores con datos) y decide si hay alerta.
+ * Si la semana actual tiene más de 2 días sin lectura, no se emite alerta: «datos insuficientes».
  */
 export function compararSemana(lecturas, espacio, tipo = 'energia', umbral = UMBRAL_POR_DEFECTO) {
   const porSemana = new Map();
+  const diasPorSemana = new Map();
   let unidad = '';
   for (const l of lecturas) {
     if (l.espacio !== espacio || l.tipo !== tipo) continue;
     const s = inicioSemana(l.fecha);
     porSemana.set(s, (porSemana.get(s) || 0) + l.valor);
+    if (!diasPorSemana.has(s)) diasPorSemana.set(s, new Set());
+    diasPorSemana.get(s).add(l.fecha);
     unidad = l.unidad;
   }
   const semanas = [...porSemana.keys()].sort();
@@ -104,7 +117,8 @@ export function compararSemana(lecturas, espacio, tipo = 'energia', umbral = UMB
   const actualSemana = semanas[semanas.length - 1];
   const actual = redondear(porSemana.get(actualSemana), 3);
   const previas = semanas.slice(-5, -1);
-  const base = { espacio, tipo, unidad, semana: actualSemana, actual, semanasBase: previas.length };
+  const diasSinDato = 7 - diasPorSemana.get(actualSemana).size;
+  const base = { espacio, tipo, unidad, semana: actualSemana, actual, semanasBase: previas.length, diasSinDato };
 
   if (previas.length === 0) {
     return { ...base, estado: 'línea base en construcción (0/4 semanas)', alerta: null };
@@ -114,6 +128,9 @@ export function compararSemana(lecturas, espacio, tipo = 'energia', umbral = UMB
     return { ...base, lineaBase, estado: 'sin línea base comparable', alerta: null };
   }
   const variacion = redondear(((actual - lineaBase) / lineaBase) * 100, 1);
+  if (diasSinDato > MAX_DIAS_SIN_DATO) {
+    return { ...base, lineaBase, variacion, estado: `datos insuficientes (${diasSinDato} días sin dato)`, alerta: null };
+  }
   const alerta = variacion > umbral
     ? `Consumo ${variacion} % sobre la línea base (regla: más de ${umbral} %)`
     : null;
