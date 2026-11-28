@@ -13,7 +13,7 @@ Equipo: Santiago Joel Álvarez Mendoza · Alejandro Emilio Cedeño Zambrano · T
 
 ## Funcionalidad verificable
 
-Importación de lecturas por CSV con validación y alerta explicada (historias del MVP):
+Importación de lecturas por CSV con validación y alerta explicada:
 
 | Historia | Qué hace | Prueba automatizada |
 |---|---|---|
@@ -22,7 +22,8 @@ Importación de lecturas por CSV con validación y alerta explicada (historias d
 | HU-03 | Rechaza lecturas duplicadas (mismo espacio, fecha y tipo) | `tests/core.test.js` |
 | HU-04 | Normaliza Wh → kWh y L → m³; rechaza unidades desconocidas | `tests/core.test.js` |
 | HU-05 | Compara la última semana con la línea base (promedio de 4 semanas); base 0 sin error | `tests/core.test.js` |
-| HU-07 | Emite una alerta con la regla aplicada si la variación supera el umbral (15 %) | `tests/core.test.js` |
+| HU-07 | Emite una alerta con la regla aplicada si la variación supera el umbral (15 %); con más de 2 días sin dato en la semana no alerta e indica «datos insuficientes» | `tests/core.test.js`, `tests/validaciones.test.js` |
+| HU-08 | Umbral configurable por espacio entre 5 % y 50 %, registrado con fecha y autor | `tests/umbral.test.js` |
 
 ## Requisitos de ejecución
 
@@ -33,7 +34,7 @@ Importación de lecturas por CSV con validación y alerta explicada (historias d
 npm ci            # instalar dependencias (lockfile)
 npm test          # pruebas (node:test)
 npm run build     # genera dist/ con versión, commit y fecha
-npm start         # servidor local en http://localhost:8080
+npm start         # construye dist/ y abre el servidor local en http://localhost:8080
 ```
 
 Con Docker:
@@ -42,6 +43,13 @@ Con Docker:
 cp .env.example .env      # poner un token propio en ECOPULSO_ADMIN_TOKEN
 docker compose up --build # http://localhost:8080 · salud en /api/health
 ```
+
+## Limitaciones conocidas (pendientes del backlog)
+
+- **HU-06** (distinguir días sin lectura de consumo 0 en el panel) aún no está implementada.
+- Los duplicados se detectan dentro de un mismo archivo; no hay persistencia entre importaciones.
+- El lector CSV separa por comas y no admite campos entre comillas.
+- Una semana cuenta 7 días: con lecturas de lunes a viernes hay 2 días sin dato y la alerta sí se evalúa.
 
 ## Estrategia de ramas
 
