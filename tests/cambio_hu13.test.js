@@ -22,7 +22,7 @@ test('HU-13 · un CSV de 10 filas con 2 sin unidad y 3 días sin lectura informa
   assert.deepEqual(lab.faltantes, ['2026-11-21', '2026-11-22', '2026-11-25']);
 });
 
-test('HU-13 · con menos de 4 semanas previas se indica «linea base en construcción (n/4 semanas)» y no se emite alerta', () => {
+test('HU-13 · con menos de 4 semanas previas se indica «línea base en construcción (n/4 semanas)» y no se emite alerta', () => {
   const l = [];
   for (let s = 0; s < 3; s++) {
     for (let d = 0; d < 5; d++) {
