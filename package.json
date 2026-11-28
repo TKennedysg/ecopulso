@@ -1,6 +1,6 @@
 {
   "name": "ecopulso",
-  "version": "1.1.1",
+  "version": "1.2.0",
   "description": "EcoPulso: observatorio de consumo y retos sostenibles (Proyecto 5, Kanban-XP, Modelado Ágil IS-505, ULEAM)",
   "type": "module",
   "private": true,
