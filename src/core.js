@@ -212,10 +212,12 @@ export function compararSemana(lecturas, espacio, tipo = 'energia', umbral = UMB
   if (diasSinDato > MAX_DIAS_SIN_DATO) {
     return { ...base, lineaBase, variacion, estado: `datos insuficientes (${diasSinDato} días sin dato)`, alerta: null };
   }
+  // Mejora tras la validación: la alerta dice cuánto bajar para volver a la normalidad.
+  const meta = redondear(lineaBase * (1 + umbral / 100), 1);
   const alerta = variacion > umbral
-    ? `Consumo ${variacion} % sobre la línea base (regla: más de ${umbral} %)`
+    ? `Consumo ${variacion} % sobre la línea base (regla: más de ${umbral} %). Meta: ${meta} ${unidad} o menos por semana (bajar ${redondear(actual - meta, 1)} ${unidad}).`
     : null;
-  return { ...base, lineaBase, variacion, estado: alerta ? 'alerta' : 'normal', alerta };
+  return { ...base, lineaBase, variacion, meta, estado: alerta ? 'alerta' : 'normal', alerta };
 }
 
 export function espacios(lecturas) {
