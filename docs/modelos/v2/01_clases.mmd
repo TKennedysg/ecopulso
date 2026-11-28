@@ -1,0 +1,57 @@
+classDiagram
+  direction LR
+  class Espacio {
+    +nombre : texto
+  }
+  class Lectura {
+    +espacio : texto
+    +fecha : AAAA-MM-DD
+    +tipo : energia|agua
+    +valor : número ≥ 0
+    +unidad : kWh|m3
+  }
+  class ResultadoImportacion {
+    +aceptadas : Lectura[]
+    +rechazadas : FilaRechazada[]
+  }
+  class FilaRechazada {
+    +fila : entero
+    +motivo : texto
+  }
+  class ComparacionSemanal {
+    +semana : lunes ISO
+    +actual : número
+    +lineaBase : número
+    +variacion : %
+    +estado : EstadoMonitoreo
+    +diasSinDato : 0..7
+  }
+  class DiaDetalle {
+    +fecha
+    +valor : número|null
+    +estado : registrado|sin dato
+  }
+  class Alerta {
+    +variacion : %
+    +regla : más de U %
+    +texto : mensaje explicado
+  }
+  class ConfiguracionUmbral {
+    +umbral : 5..50 %
+    +autor : texto
+    +fecha : ISO 8601
+  }
+  class ResumenFaltantes {
+    +desde
+    +hasta
+    +faltantes : fecha[]
+  }
+  ResultadoImportacion "1" *-- "0..*" Lectura : acepta
+  ResultadoImportacion "1" *-- "0..*" FilaRechazada : rechaza
+  Espacio "1" -- "0..*" Lectura : registra
+  Espacio "1" -- "0..*" ConfiguracionUmbral : historial de umbrales
+  ComparacionSemanal "0..*" --> "1" Espacio : evalúa
+  ComparacionSemanal "1" *-- "7" DiaDetalle : detalle de la semana
+  ComparacionSemanal "1" *-- "0..1" Alerta : emite
+  ComparacionSemanal ..> ConfiguracionUmbral : usa el último umbral
+  ResumenFaltantes "0..*" --> "1" Espacio : HU-13

@@ -1,0 +1,88 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1640" height="548" viewBox="0 0 1640 548" font-family="Arial, Helvetica, sans-serif" font-size="13">
+<defs><marker id="seq" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto"><path d="M0,0 L10,4 L0,8 z" fill="#14532D"/></marker>
+<marker id="msg" markerWidth="12" markerHeight="10" refX="11" refY="5" orient="auto"><path d="M0,0 L11,5 L0,10 z" fill="#fff" stroke="#555"/></marker>
+<marker id="msgs" markerWidth="10" markerHeight="10" refX="5" refY="5"><circle cx="5" cy="5" r="3.5" fill="#fff" stroke="#555"/></marker></defs>
+<rect width="100%" height="100%" fill="#fff"/>
+<rect x="10" y="15" width="1620" height="225" fill="#F8FAF8" stroke="#14532D" stroke-width="1.5"/>
+<rect x="10" y="15" width="34" height="225" fill="#14532D"/>
+<text x="27" y="127.5" fill="#fff" font-weight="bold" text-anchor="middle" transform="rotate(-90 27 127.5)">Responsable de espacio</text>
+<rect x="10" y="285" width="1620" height="240" fill="#F8FAF8" stroke="#14532D" stroke-width="1.5"/>
+<rect x="10" y="285" width="34" height="240" fill="#14532D"/>
+<text x="27" y="405.0" fill="#fff" font-weight="bold" text-anchor="middle" transform="rotate(-90 27 405.0)">Sistema EcoPulso</text>
+<circle cx="85" cy="110" r="17" fill="#fff" stroke="#14532D" stroke-width="1.8"/>
+<text x="85" y="144" text-anchor="middle" font-size="12">Inicio:</text>
+<text x="85" y="159" text-anchor="middle" font-size="12">fin de semana</text>
+<rect x="130" y="85" width="150" height="50" rx="10" fill="#EEF5F0" stroke="#14532D" stroke-width="1.6"/>
+<text x="205.0" y="106.0" text-anchor="middle">Exportar lecturas</text>
+<text x="205.0" y="122.0" text-anchor="middle">a CSV</text>
+<rect x="320" y="85" width="150" height="50" rx="10" fill="#EEF5F0" stroke="#14532D" stroke-width="1.6"/>
+<text x="395.0" y="106.0" text-anchor="middle">Importar el CSV</text>
+<text x="395.0" y="122.0" text-anchor="middle">en EcoPulso</text>
+<rect x="560" y="165" width="150" height="50" rx="10" fill="#FFF4E5" stroke="#B45309" stroke-width="1.6"/>
+<text x="635.0" y="194.0" text-anchor="middle">Corregir el archivo</text>
+<rect x="1170" y="75" width="170" height="56" rx="10" fill="#EEF5F0" stroke="#14532D" stroke-width="1.6"/>
+<text x="1255.0" y="99.0" text-anchor="middle">Revisar alerta y</text>
+<text x="1255.0" y="115.0" text-anchor="middle">proponer acción de ahorro</text>
+<circle cx="1410" cy="103" r="17" fill="#fff" stroke="#14532D" stroke-width="4"/>
+<text x="1410" y="137" text-anchor="middle" font-size="12">Fin: acción</text>
+<text x="1410" y="152" text-anchor="middle" font-size="12">propuesta</text>
+<rect x="1390" y="165" width="150" height="50" rx="10" fill="#EEF5F0" stroke="#14532D" stroke-width="1.6"/>
+<text x="1465.0" y="194.0" text-anchor="middle">Revisar panel</text>
+<circle cx="1590" cy="190" r="17" fill="#fff" stroke="#14532D" stroke-width="4"/>
+<text x="1590" y="224" text-anchor="middle" font-size="12">Fin: semana</text>
+<text x="1590" y="239" text-anchor="middle" font-size="12">revisada</text>
+<polyline points="102,110 130,110" fill="none" stroke="#14532D" stroke-width="1.6" marker-end="url(#seq)"/>
+<polyline points="280,110 320,110" fill="none" stroke="#14532D" stroke-width="1.6" marker-end="url(#seq)"/>
+<polyline points="560,190 395,190 395,135" fill="none" stroke="#14532D" stroke-width="1.6" marker-end="url(#seq)"/>
+<polyline points="1340,103 1393,103" fill="none" stroke="#14532D" stroke-width="1.6" marker-end="url(#seq)"/>
+<polyline points="1540,190 1573,190" fill="none" stroke="#14532D" stroke-width="1.6" marker-end="url(#seq)"/>
+<rect x="320" y="355" width="150" height="50" rx="10" fill="#EEF5F0" stroke="#14532D" stroke-width="1.6"/>
+<text x="395.0" y="376.0" text-anchor="middle">Validar encabezado</text>
+<text x="395.0" y="392.0" text-anchor="middle">y filas</text>
+<polygon points="520,354 546,380 520,406 494,380" fill="#fff" stroke="#14532D" stroke-width="1.6"/>
+<text x="520" y="385" text-anchor="middle" font-size="18" font-weight="bold">×</text>
+<text x="520" y="332" text-anchor="middle" font-size="12">¿Encabezado</text>
+<text x="520" y="346" text-anchor="middle" font-size="12">válido?</text>
+<rect x="560" y="455" width="150" height="50" rx="10" fill="#FFF4E5" stroke="#B45309" stroke-width="1.6"/>
+<text x="635.0" y="476.0" text-anchor="middle">Rechazar archivo</text>
+<text x="635.0" y="492.0" text-anchor="middle">con motivo</text>
+<rect x="740" y="355" width="170" height="50" rx="10" fill="#EEF5F0" stroke="#14532D" stroke-width="1.6"/>
+<text x="825.0" y="376.0" text-anchor="middle">Informar filas rechazadas</text>
+<text x="825.0" y="392.0" text-anchor="middle">y días sin dato</text>
+<rect x="950" y="355" width="150" height="50" rx="10" fill="#EEF5F0" stroke="#14532D" stroke-width="1.6"/>
+<text x="1025.0" y="376.0" text-anchor="middle">Comparar semana</text>
+<text x="1025.0" y="392.0" text-anchor="middle">con línea base</text>
+<polygon points="1140,354 1166,380 1140,406 1114,380" fill="#fff" stroke="#14532D" stroke-width="1.6"/>
+<text x="1140" y="385" text-anchor="middle" font-size="18" font-weight="bold">×</text>
+<text x="1110" y="344" text-anchor="end" font-size="12">¿Variación &gt; umbral</text>
+<text x="1110" y="358" text-anchor="end" font-size="12">y 4 semanas previas?</text>
+<rect x="1170" y="300" width="170" height="50" rx="10" fill="#EEF5F0" stroke="#14532D" stroke-width="1.6"/>
+<text x="1255.0" y="321.0" text-anchor="middle">Emitir alerta</text>
+<text x="1255.0" y="337.0" text-anchor="middle">con la regla</text>
+<rect x="1390" y="420" width="150" height="56" rx="10" fill="#EEF5F0" stroke="#14532D" stroke-width="1.6"/>
+<text x="1465.0" y="436.0" text-anchor="middle">Mostrar estado: normal,</text>
+<text x="1465.0" y="452.0" text-anchor="middle">en construcción o</text>
+<text x="1465.0" y="468.0" text-anchor="middle">datos insuficientes</text>
+<polyline points="470,380 494,380" fill="none" stroke="#14532D" stroke-width="1.6" marker-end="url(#seq)"/>
+<polyline points="520,406 520,480 560,480" fill="none" stroke="#14532D" stroke-width="1.6" marker-end="url(#seq)"/>
+<text x="528" y="450" font-size="12" fill="#14532D">No</text>
+<polyline points="546,380 740,380" fill="none" stroke="#14532D" stroke-width="1.6" marker-end="url(#seq)"/>
+<text x="556" y="372" font-size="12" fill="#14532D">Sí</text>
+<polyline points="910,380 950,380" fill="none" stroke="#14532D" stroke-width="1.6" marker-end="url(#seq)"/>
+<polyline points="1100,380 1114,380" fill="none" stroke="#14532D" stroke-width="1.6" marker-end="url(#seq)"/>
+<polyline points="1140,354 1140,325 1170,325" fill="none" stroke="#14532D" stroke-width="1.6" marker-end="url(#seq)"/>
+<text x="1146" y="345" font-size="12" fill="#14532D">Sí</text>
+<polyline points="1140,406 1140,448 1390,448" fill="none" stroke="#14532D" stroke-width="1.6" marker-end="url(#seq)"/>
+<text x="1148" y="430" font-size="12" fill="#14532D">No</text>
+<line x1="395" y1="135" x2="395" y2="355" stroke="#555" stroke-width="1.4" stroke-dasharray="7,5" marker-start="url(#msgs)" marker-end="url(#msg)"/>
+<text x="402" y="300" font-size="12" fill="#333" font-style="italic">archivo CSV</text>
+<line x1="635" y1="455" x2="635" y2="215" stroke="#555" stroke-width="1.4" stroke-dasharray="7,5" marker-start="url(#msgs)" marker-end="url(#msg)"/>
+<text x="642" y="255" font-size="12" fill="#333" font-style="italic">archivo rechazado (excepción)</text>
+<line x1="1255" y1="300" x2="1255" y2="131" stroke="#555" stroke-width="1.4" stroke-dasharray="7,5" marker-start="url(#msgs)" marker-end="url(#msg)"/>
+<text x="1262" y="270" font-size="12" fill="#333" font-style="italic">alerta</text>
+<line x1="1465" y1="420" x2="1465" y2="215" stroke="#555" stroke-width="1.4" stroke-dasharray="7,5" marker-start="url(#msgs)" marker-end="url(#msg)"/>
+<text x="1472" y="300" font-size="12" fill="#333" font-style="italic">panel actualizado</text>
+<line x1="60" y1="530" x2="100" y2="530" stroke="#14532D" stroke-width="1.6" marker-end="url(#seq)"/><text x="108" y="534" font-size="12">flujo de secuencia</text>
+<line x1="260" y1="530" x2="300" y2="530" stroke="#555" stroke-dasharray="7,5" marker-end="url(#msg)"/><text x="308" y="534" font-size="12">flujo de mensaje entre participantes</text>
+<rect x="560" y="522" width="22" height="14" rx="4" fill="#FFF4E5" stroke="#B45309"/><text x="590" y="534" font-size="12">ruta de excepción</text>
+</svg>

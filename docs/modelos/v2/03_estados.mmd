@@ -1,0 +1,21 @@
+stateDiagram-v2
+  direction TB
+  [*] --> SinDatos
+  SinDatos --> EnConstruccion : importar 1.ª semana
+  EnConstruccion --> EnConstruccion : [previas < 4]
+  EnConstruccion --> Evaluable : [4 previas]
+  state Evaluable {
+    direction LR
+    [*] --> Normal
+    Normal --> EnAlerta : [var > U]
+    EnAlerta --> Normal : [var ≤ U] o ajuste de U
+  }
+  Evaluable --> DatosInsuficientes : [> 2 días sin dato]
+  DatosInsuficientes --> Evaluable : semana completa
+  Evaluable --> SinLineaBase : [base = 0]
+  SinLineaBase --> Evaluable : [base > 0]
+  EnConstruccion : línea base en construcción (n/4)
+  EnAlerta : alerta con regla explicada
+  DatosInsuficientes : datos insuficientes
+  SinLineaBase : sin línea base comparable
+  Evaluable : con línea base de 4 semanas

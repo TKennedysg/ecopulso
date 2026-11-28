@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="560" viewBox="0 0 1200 560" font-family="Arial, Helvetica, sans-serif">
+<defs><marker id="a" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto"><path d="M0,0 L10,4 L0,8 z" fill="#444"/></marker></defs>
+<rect width="100%" height="100%" fill="#fff"/>
+<text x="20" y="32" font-size="20" font-weight="bold" fill="#14532D">C4 · Nivel 1 · Contexto de EcoPulso</text>
+<rect x="80" y="70" width="260" height="120" rx="26" fill="#08427B" stroke="#2d2d2d" stroke-width="0.8"/>
+<text x="210.0" y="96" text-anchor="middle" font-size="16" font-weight="bold" fill="#fff">Responsable de espacio</text>
+<text x="210.0" y="115" text-anchor="middle" font-size="12" fill="#fff">[Persona]</text>
+<text x="210.0" y="138" text-anchor="middle" font-size="13" fill="#fff">Docente o técnico a cargo de un aula</text>
+<text x="210.0" y="154" text-anchor="middle" font-size="13" fill="#fff">o laboratorio</text>
+<rect x="860" y="70" width="260" height="120" rx="26" fill="#08427B" stroke="#2d2d2d" stroke-width="0.8"/>
+<text x="990.0" y="96" text-anchor="middle" font-size="16" font-weight="bold" fill="#fff">Estudiante</text>
+<text x="990.0" y="115" text-anchor="middle" font-size="12" fill="#fff">[Persona]</text>
+<text x="990.0" y="138" text-anchor="middle" font-size="13" fill="#fff">Comunidad que usa el espacio</text>
+<rect x="440" y="250" width="320" height="140" rx="8" fill="#1168BD" stroke="#2d2d2d" stroke-width="0.8"/>
+<text x="600.0" y="276" text-anchor="middle" font-size="16" font-weight="bold" fill="#fff">EcoPulso</text>
+<text x="600.0" y="295" text-anchor="middle" font-size="12" fill="#fff">[Sistema de software]</text>
+<text x="600.0" y="318" text-anchor="middle" font-size="13" fill="#fff">Importa lecturas simuladas, las compara con</text>
+<text x="600.0" y="334" text-anchor="middle" font-size="13" fill="#fff">una línea base y emite alertas explicadas</text>
+<rect x="60" y="400" width="280" height="120" rx="8" fill="#999999" stroke="#2d2d2d" stroke-width="0.8"/>
+<text x="200.0" y="426" text-anchor="middle" font-size="16" font-weight="bold" fill="#fff">Hoja de cálculo / CSV</text>
+<text x="200.0" y="445" text-anchor="middle" font-size="12" fill="#fff">[Sistema externo]</text>
+<text x="200.0" y="468" text-anchor="middle" font-size="13" fill="#fff">Origen de las lecturas simuladas de</text>
+<text x="200.0" y="484" text-anchor="middle" font-size="13" fill="#fff">consumo</text>
+<rect x="860" y="400" width="280" height="120" rx="8" fill="#999999" stroke="#2d2d2d" stroke-width="0.8"/>
+<text x="1000.0" y="426" text-anchor="middle" font-size="16" font-weight="bold" fill="#fff">GitHub</text>
+<text x="1000.0" y="445" text-anchor="middle" font-size="12" fill="#fff">[Sistema externo]</text>
+<text x="1000.0" y="468" text-anchor="middle" font-size="13" fill="#fff">Repositorio, Actions (CI/CD) y Pages</text>
+<text x="1000.0" y="484" text-anchor="middle" font-size="13" fill="#fff">(publicación)</text>
+<polyline points="250,190 250,225 500,225 500,250" fill="none" stroke="#444" stroke-width="1.5" stroke-dasharray="6,4" marker-end="url(#a)"/>
+<text x="375" y="214" font-size="13" fill="#222" text-anchor="middle">Importa lecturas, revisa alertas y ajusta umbrales</text>
+<text x="375" y="230" font-size="12" fill="#555" text-anchor="middle" font-style="italic">[HTTPS]</text>
+<polyline points="990,190 990,225 700,225 700,250" fill="none" stroke="#444" stroke-width="1.5" stroke-dasharray="6,4" marker-end="url(#a)"/>
+<text x="850" y="214" font-size="13" fill="#222" text-anchor="middle">Consulta el panel</text>
+<text x="850" y="230" font-size="12" fill="#555" text-anchor="middle" font-style="italic">[HTTPS]</text>
+<polyline points="200,190 200,400" fill="none" stroke="#444" stroke-width="1.5" stroke-dasharray="6,4" marker-end="url(#a)"/>
+<text x="135" y="300" font-size="13" fill="#222" text-anchor="middle">Exporta lecturas</text>
+<polyline points="860,460 680,460 680,390" fill="none" stroke="#444" stroke-width="1.5" stroke-dasharray="6,4" marker-end="url(#a)"/>
+<text x="770" y="488" font-size="13" fill="#222" text-anchor="middle">Prueba, construye y publica cada versión</text>
+<polyline points="340,460 520,460 520,390" fill="none" stroke="#444" stroke-width="1.5" stroke-dasharray="6,4" marker-end="url(#a)"/>
+<text x="430" y="488" font-size="13" fill="#222" text-anchor="middle">Archivo CSV importado</text>
+</svg>
