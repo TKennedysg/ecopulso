@@ -1,7 +1,7 @@
 // HU-07 (criterio de datos insuficientes) y validaciones de entrada del CSV.
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { importarCSV, compararSemana, fechaValida } from '../src/core.js';
+import { importarCSV, compararSemana, fechaValida, configurarUmbral } from '../src/core.js';
 
 const ENC = 'espacio,fecha,tipo,valor,unidad';
 
@@ -51,3 +51,30 @@ test('Validación · «Infinity» no se acepta como consumo', () => {
   assert.equal(r.aceptadas.length, 0);
   assert.deepEqual(r.rechazadas.map((x) => x.motivo), ['valor no numérico', 'valor no numérico']);
 });
+
+test('HU-06 · distingue un consumo 0 de un día sin lectura', () => {
+  const lecturas = [
+    { espacio: 'Lab-1', tipo: 'energia', unidad: 'kWh', valor: 0, fecha: '2026-11-23' },
+    { espacio: 'Lab-1', tipo: 'energia', unidad: 'kWh', valor: 10, fecha: '2026-11-24' },
+  ];
+  const r = compararSemana(lecturas, 'Lab-1');
+  assert.deepEqual(r.detalleDiario.slice(0, 3).map((d) => [d.fecha, d.valor, d.estado]), [
+    ['2026-11-23', 0, 'registrado'],
+    ['2026-11-24', 10, 'registrado'],
+    ['2026-11-25', null, 'sin dato'],
+  ]);
+});
+
+test('Validación · el CSV admite campos entre comillas y comas', () => {
+  const r = importarCSV(`${ENC}\n"Lab, bloque A",2026-11-02,energia,10,kWh`);
+  assert.equal(r.aceptadas[0].espacio, 'Lab, bloque A');
+});
+
+test('HU-08 · no permite configurar un umbral sin espacio', () => {
+  assert.throws(() => importarUmbralSinEspacio(), /Indique el espacio/);
+});
+
+function importarUmbralSinEspacio() {
+  // Importación local para mantener juntas las pruebas de validación de HU-08.
+  return configurarUmbral('', 25, 'Autor');
+}
