@@ -74,7 +74,7 @@ test('HU-05 · una línea base igual a 0 no produce error de división', () => {
 
 test('HU-07 · con umbral 15 % y semana a +20 % aparece la alerta con su regla', () => {
   const r = compararSemana(semanas([100, 100, 100, 100, 120]), 'Lab-1', 'energia', 15);
-  assert.equal(r.alerta, 'Consumo 20 % sobre la línea base (regla: más de 15 %)');
+  assert.equal(r.alerta, 'Consumo 20 % sobre la línea base (regla: más de 15 %). Meta: 115 kWh o menos por semana (bajar 5 kWh).');
 });
 
 test('HU-07 · con una semana a +10 % no se genera alerta', () => {
